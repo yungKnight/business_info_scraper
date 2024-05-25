@@ -56,3 +56,36 @@ async def test_main():
                         'website': business.css('div.website a::text').get()
                     }
                     client_info.append(info)
+
+            if not client_info:
+                print(f'No significant information found on page {page_number} for {state}. Skipping extraction.')
+            else:
+                file_name = f'client_info_{page_number}.json'
+                file_path = os.path.join(folder, file_name)
+
+                with open(file_path, 'w') as json_file:
+                    json.dump(client_info, json_file, indent=4)
+                    print(f'Items extracted from page {page_number} for {state} and saved to "{file_path}"')
+
+            current_page = await page.query_selector('li.active a[data-page-number]')
+            if current_page:               
+                current_page_number = await current_page.get_attribute('data-page-number')
+                next_page_number = int(current_page_number) + 1
+                next_page_selector = f'li a[data-page-number="{next_page_number}"]'
+
+                next_page = await page.query_selector(next_page_selector)
+
+                if next_page:
+                    await next_page.click()
+                    #current_pager = str(int(current_page_number) + 1)
+
+                    #next_pager = str(int(next_page_number) + 1)
+                    try:
+                        await page.wait_for_url(f"https://christianlist.gdirect.com/search-results?BusinessDirectoryId=f3830fa2-22d3-4465-80b2-e1a797dbd0c0&adId=0&IsExpandedSearch=False&CurrentPageNumber={next_page_number}&ItemsPerPage=50&CategoryId=0&Lat=63.588753&Lng=-154.4930619&SearchTerm=&Distance=0&Address={state}", timeout=75000)
+                    except:
+                        print('timeout error')
+                else:
+                    break
+
+            await page.close()
+            page_number += 1  
