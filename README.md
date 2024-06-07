@@ -24,19 +24,20 @@ for a dynamic or parrallel run for all states in this code.
    ```sh
    cd path/to/business_info_scraper
    
-3. **Install required dependencies by running this command on your terminal using ```pip```:**
+3. **Create a virtual environment:**
+	```sh
+	python -m venv venv
+	```
 
-   ```
-   pip install pytest pytest-asyncio asyncio playwright scrapy
-   ```
-   
-   +++ This installs ```pytest```, the ```pytest-asyncio``` plugin, ```asyncio```, ```playwright``` and ```scrapy``` +++
+4. **Activate virtual environment: (On windows)**
+	```sh
+	source venv\Scripts\activate
+	```
 
-4. **Install browser for ```playwright``` (chromium browser for this project):**
-
-   ```
-   playwright install chromium
-   ```
+5. **Install the required dependencies:**
+	```sh
+	pip install -r requirements.txt
+	```
 ## Usage
 1. **Navigate to your project directory**
    ```sh
